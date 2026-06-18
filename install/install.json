@@ -1,0 +1,35 @@
+{
+  "version": "3.0",
+  "repository": {
+    "url": "https://github.com/alessandrovisentini/nixos.git",
+    "target_dir": "$HOME/Development/repos/nixos"
+  },
+  "dotfiles": {
+    "url": "https://github.com/alessandrovisentini/dotfiles.git",
+    "target_dir": "$HOME/Development/repos/dotfiles"
+  },
+  "os": {
+    "nixos": {
+      "config_symlinks": [
+        "alacritty",
+        "astal-bar",
+        "git",
+        "glow",
+        "lazygit",
+        "nvim",
+        "rofi",
+        "sway",
+        "swaync",
+        "tmux",
+        "wm-scripts"
+      ],
+      "nixos_symlinks": {
+        "enabled": true,
+        "source_dir": ".",
+        "target_dir": "/etc/nixos",
+        "exclude": ["hardware-configuration.nix", "device.nix"]
+      },
+      "post_install": []
+    }
+  }
+}
