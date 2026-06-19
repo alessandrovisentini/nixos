@@ -42,18 +42,6 @@
       description = "Enables gaming software (Steam with Remote Play and dedicated server firewall openings).";
     };
 
-    isThinkpad = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Lenovo ThinkPad. Enables ThinkPad-specific power tuning (thinkpad_acpi platform_profile in TLP).";
-    };
-
-    tlp = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable TLP power management (CPU governor/turbo, PCIe ASPM, Wi-Fi powersave, runtime PM). Opt-in per device.";
-    };
-
     hasTranscription = lib.mkOption {
       type = lib.types.bool;
       default = false;

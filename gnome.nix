@@ -8,7 +8,7 @@
 
   services.gnome.games.enable = false;
   services.gnome.core-apps.enable = false;
-  services.power-profiles-daemon.enable = false; # conflicts with TLP
+  services.power-profiles-daemon.enable = false; # conflicts with auto-cpufreq
   environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs];
   users.users.${config.local.device.userName}.packages = with pkgs; [gnome-tweaks];
 
