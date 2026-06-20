@@ -4,27 +4,6 @@
   ...
 }: let
   dev = config.local.device;
-
-  # ags wrapped with the libraries the bar imports; runs from source so
-  # bar edits don't need a rebuild.
-  agsBar = pkgs.ags.override {
-    extraPackages = with pkgs; [
-      astal.astal3
-      astal.battery
-      astal.bluetooth
-      astal.network
-      astal.tray
-      astal.wireplumber
-      astal.notifd
-      astal.mpris
-      astal.io
-      networkmanager
-    ];
-  };
-  astalBar = pkgs.writeShellScriptBin "astal-bar" ''
-    exec ${agsBar}/bin/ags run "$HOME/.config/astal-bar/app.ts" "$@"
-  '';
-
 in {
   programs.sway = {
     enable = true;
@@ -40,9 +19,6 @@ in {
 
         # emoji picker (floating, types into focused window)
         rofimoji
-
-        # bar
-        astalBar
 
         # notifications
         libnotify
