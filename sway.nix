@@ -78,7 +78,8 @@ in {
     };
   };
 
-  # Fix swaylock PAM authentication when using GDM.
+  # swaylock has no PAM service of its own; authenticate against the login
+  # stack so unlocking works.
   security.pam.services.swaylock.text = ''
     auth include login
   '';
