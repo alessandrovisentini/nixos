@@ -91,7 +91,7 @@ in {
 
   # Aliases
   environment.shellAliases = {
-    t = "$REPOS_HOME/dotfiles/scripts/td.sh";
+    t = "$REPOS_HOME/dotfiles/scripts/t.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
     ai = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh";

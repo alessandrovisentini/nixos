@@ -1,25 +1,9 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }: let
   dev = config.local.device;
-
-  # Sibling dotfiles repo (see install layout): $REPOS_HOME/dotfiles.
-  reposHome = ../.;
-
-  # Lock wrapper: gtklock, plus gtklock-virtkb-module in tablet mode so
-  # the password is typable on the touchscreen. virtkb is loaded via -m
-  # at the wrapper rather than programs.gtklock.modules, so the OSK
-  # only appears in tablet mode (the module always-reveals the
-  # keyboard with no toggle).
-  lockScreen = pkgs.writeShellScriptBin "lock-screen" (
-    builtins.replaceStrings
-    ["@VIRTKB@"]
-    ["${pkgs.gtklock-virtkb-module}/lib/gtklock/virtkb-module.so"]
-    (builtins.readFile (reposHome + "/dotfiles/config/wm-scripts/lock-screen.sh"))
-  );
 
   # ags wrapped with the libraries the bar imports; runs from source so
   # bar edits don't need a rebuild.
@@ -47,9 +31,9 @@ in {
     wrapperFeatures.gtk = true;
     extraPackages = with pkgs;
       [
-        # lock + idle (gtklock from programs.gtklock below)
+        # lock + idle
+        swaylock
         swayidle
-        lockScreen
 
         # launcher
         rofi
@@ -118,10 +102,10 @@ in {
     };
   };
 
-  programs.gtklock.enable = true;
-
-  # Password only; fingerprint reader stays disabled at the lock.
-  security.pam.services.gtklock.fprintAuth = lib.mkIf dev.hasFingerprint false;
+  # Fix swaylock PAM authentication when using GDM.
+  security.pam.services.swaylock.text = ''
+    auth include login
+  '';
 
   # Screenshare + file pickers
   xdg.portal = {
