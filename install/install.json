@@ -19,6 +19,7 @@
         "nvim",
         "rofi",
         "sway",
+        "swaylock",
         "swaync",
         "tmux",
         "wm-scripts"
