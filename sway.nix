@@ -101,11 +101,11 @@ in {
     };
   };
 
-  # swaylock has no PAM service of its own; authenticate against the login
-  # stack so unlocking works.
-  security.pam.services.swaylock.text = ''
-    auth include login
-  '';
+  # swaylock has no PAM service of its own. Give it the standard generated
+  # stack with fingerprint disabled: fprintd would otherwise block the unlock
+  # waiting on the reader before accepting the typed password, making every
+  # unlock slow. Fingerprint stays available for sudo/polkit.
+  security.pam.services.swaylock.fprintAuth = false;
 
   # Screenshare + file pickers
   xdg.portal = {
