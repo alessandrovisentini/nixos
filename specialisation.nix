@@ -6,8 +6,8 @@
 
       boot = {
         initrd.kernelModules = ["amdgpu"];
-        kernelParams = ["amdgpu.pcie_gen_cap=0x40000"];
-        # Keep the Intel iGPU off so the AMD eGPU is the only graphics device.
+        # module_blacklist on the cmdline keeps the kernel from loading the Intel DRM drivers at all
+        kernelParams = ["amdgpu.pcie_gen_cap=0x40000" "module_blacklist=i915,xe"];
         blacklistedKernelModules = ["i915" "xe"];
       };
 
