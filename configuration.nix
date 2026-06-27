@@ -9,6 +9,7 @@
       ./power.nix
       ./main_user.nix
       ./apps.nix
+      ./gaming.nix
       ./display_manager.nix
       # ./gnome.nix
       ./sway.nix
