@@ -12,7 +12,6 @@
     "nixos": {
       "config_symlinks": [
         "alacritty",
-        "astal-bar",
         "git",
         "glow",
         "lazygit",
