@@ -78,6 +78,7 @@ in {
     vscodium
     pdfarranger
     unstable.claude-code
+    brave
   ];
 
   # Browsers
