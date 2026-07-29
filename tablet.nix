@@ -20,34 +20,16 @@
 
   applyMode = pkgs.writeShellScriptBin "apply-mode" (builtins.readFile (dotfilesConfig + "/wm-scripts/apply-mode.sh"));
   oskToggle = pkgs.writeShellScriptBin "osk-toggle" (builtins.readFile (dotfilesConfig + "/wm-scripts/osk-toggle.sh"));
-  gridLauncher = pkgs.writeShellScriptBin "grid-toggle" (builtins.readFile (dotfilesConfig + "/wm-scripts/grid.sh"));
   modeCycle = pkgs.writeShellScriptBin "mode-cycle" (builtins.readFile (dotfilesConfig + "/wm-scripts/mode-cycle.sh"));
   lisgdSway = pkgs.writeShellScriptBin "lisgd-sway" (builtins.readFile (dotfilesConfig + "/wm-scripts/lisgd-sway.sh"));
   swayRotate = pkgs.writeShellScriptBin "sway-rotate" (builtins.readFile (dotfilesConfig + "/wm-scripts/sway-rotate.sh"));
   swayWsShift = pkgs.writeShellScriptBin "sway-ws-shift" (builtins.readFile (dotfilesConfig + "/wm-scripts/sway-ws-shift.sh"));
 
-  # GTK3, not GTK4: GTK4 layer-shell surfaces drop wl_touch events on
-  # wlroots compositors.
-  appGrid = pkgs.rustPlatform.buildRustPackage {
-    pname = "grinch";
-    version = "1.0.0";
-    src = dotfilesConfig + "/grinch";
-    cargoLock.lockFile = dotfilesConfig + "/grinch/Cargo.lock";
-    nativeBuildInputs = with pkgs; [pkg-config wrapGAppsHook3];
-    buildInputs = with pkgs; [
-      gtk3
-      gtk-layer-shell
-      librsvg
-      gdk-pixbuf
-      glib
-    ];
-  };
-
   # Detachable convertibles (SW_TABLET_MODE switch).
   tabletPkgs = [modeDaemon applyMode modeCycle];
 
-  # Touchscreen (OSK toggle, touch app-grid).
-  touchPkgs = [oskToggle gridLauncher appGrid];
+  # Touchscreen (OSK toggle).
+  touchPkgs = [oskToggle];
 
   # Touchscreen gestures + key injection, added to programs.sway.extraPackages.
   swayTouchPkgs = with pkgs; [lisgd wtype lisgdSway swayWsShift];
@@ -65,7 +47,7 @@ in {
     partOf = ["graphical-session.target"];
     after = ["graphical-session.target"];
     path =
-      [applyMode oskToggle gridLauncher]
+      [applyMode oskToggle]
       ++ (with pkgs; [coreutils systemd procps libnotify glib sway jq]);
     environment = {
       DETACHABLE_TOUCHPAD_SWAY_ID = dev.detachableTouchpadSwayId;
