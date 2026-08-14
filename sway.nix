@@ -4,6 +4,19 @@
   ...
 }: let
   dev = config.local.device;
+
+  # Wi-Fi picker. NetworkManager already ships nmtui, so this is only a
+  # launcher entry that opens it in its own terminal window; the class is what
+  # the Sway floating rule matches.
+  wifiMenu = pkgs.makeDesktopItem {
+    name = "wifi-menu";
+    desktopName = "Wi-Fi";
+    comment = "Connect to a wireless network";
+    exec = "alacritty --class wifi-menu --title Wi-Fi -e nmtui-connect";
+    icon = "network-wireless";
+    categories = ["Settings" "Network"];
+    keywords = ["wifi" "wireless" "network" "wlan"];
+  };
 in {
   programs.sway = {
     enable = true;
@@ -29,6 +42,7 @@ in {
 
         # network
         networkmanagerapplet
+        wifiMenu
 
         # audio
         pwvucontrol
