@@ -11,7 +11,7 @@
       ./apps.nix
       ./gaming.nix
       ./display_manager.nix
-      # ./gnome.nix
+      ./gnome.nix
       ./sway.nix
       ./tablet.nix
       ./development.nix

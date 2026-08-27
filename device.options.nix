@@ -48,6 +48,12 @@
       description = "Enables the audio transcription stack (transcribe-audio: Vulkan whisper.cpp + sherpa-onnx + ffmpeg). Opt-in per device.";
     };
 
+    hasGnome = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enables the GNOME desktop as an extra session alongside Sway. Sway stays the default session.";
+    };
+
     internalOutput = lib.mkOption {
       type = lib.types.str;
       default = "eDP-1";
