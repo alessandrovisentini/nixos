@@ -78,7 +78,6 @@ in {
     vscodium
     pdfarranger
     unstable.claude-code
-    brave
     nethack
   ];
 
