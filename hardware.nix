@@ -11,7 +11,9 @@ in {
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-      intel-media-driver
+      intel-media-driver # VA-API (iHD)
+      vpl-gpu-rt # Quick Sync, through the oneVPL dispatcher
+      intel-compute-runtime # OpenCL, used by the HDR tone mapping filters
     ];
   };
 

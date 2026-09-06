@@ -16,6 +16,7 @@
       ./tablet.nix
       ./development.nix
       ./transcription.nix
+      ./jellyfin.nix
       ./printing.nix
       ./mime_apps.nix
       ./nix.nix

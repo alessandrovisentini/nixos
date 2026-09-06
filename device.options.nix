@@ -48,6 +48,12 @@
       description = "Enables the audio transcription stack (transcribe-audio: Vulkan whisper.cpp + sherpa-onnx + ffmpeg). Opt-in per device.";
     };
 
+    hasJellyfin = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Runs the Jellyfin media server, with Intel hardware transcoding and a shared library directory. Opt-in per device.";
+    };
+
     hasGnome = lib.mkOption {
       type = lib.types.bool;
       default = false;
