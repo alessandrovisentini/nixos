@@ -79,6 +79,7 @@ in {
     pdfarranger
     unstable.claude-code
     nethack
+    brave
   ];
 
   # Browsers

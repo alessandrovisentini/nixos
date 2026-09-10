@@ -30,6 +30,9 @@ in {
         # launcher
         rofi
 
+        # bar
+        waybar
+
         # emoji picker (floating, types into focused window)
         rofimoji
 

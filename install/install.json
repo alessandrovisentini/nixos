@@ -21,6 +21,7 @@
         "swaylock",
         "swaync",
         "tmux",
+        "waybar",
         "wm-scripts"
       ],
       "nixos_symlinks": {
