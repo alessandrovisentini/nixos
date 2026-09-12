@@ -60,6 +60,18 @@
       description = "Enables the GNOME desktop as an extra session alongside Sway. Sway stays the default session.";
     };
 
+    hasPhosh = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enables Phosh, the mobile shell, as an extra session alongside Sway. Sway stays the default session.";
+    };
+
+    hasTouchGreeter = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Boots into a graphical greeter with an on-screen keyboard instead of the TTY greeter, for devices that come up without a keyboard attached.";
+    };
+
     internalOutput = lib.mkOption {
       type = lib.types.str;
       default = "eDP-1";
