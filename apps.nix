@@ -22,6 +22,7 @@ in {
     ripgrep
     fzf
     unzip
+    zip
 
     # Development
     nodejs
