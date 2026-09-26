@@ -90,6 +90,8 @@ in {
   programs.git.enable = true;
   programs.git.lfs.enable = true;
 
+  programs.gh.enable = true;
+
   programs.tmux.enable = true;
 
   programs.neovim = {
