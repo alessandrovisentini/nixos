@@ -38,6 +38,7 @@ in {
     tree-sitter
     markdownlint-cli
     android-tools
+    gh
   ];
 
   virtualisation.docker.enable = true;
@@ -89,8 +90,6 @@ in {
 
   programs.git.enable = true;
   programs.git.lfs.enable = true;
-
-  programs.gh.enable = true;
 
   programs.tmux.enable = true;
 
