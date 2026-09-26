@@ -9,7 +9,7 @@
     hasTouchscreen = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Built-in touchscreen. Enables squeekboard (OSK) and lisgd gestures.";
+      description = "Built-in touchscreen. Enables lisgd gestures.";
     };
 
     hasAccelerometer = lib.mkOption {

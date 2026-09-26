@@ -65,6 +65,7 @@ in {
     imv
     yt-dlp
     vlc
+    mpv
     calibre
     gimp
     inkscape-with-extensions
@@ -84,16 +85,7 @@ in {
   ];
 
   # Browsers
-  programs.firefox = {
-    enable = true;
-    # text-input-v3 (OSK auto-popup) is behind a pref.
-    policies.Preferences = {
-      "widget.wayland-text-input-v3.enabled" = {
-        Value = true;
-        Status = "locked";
-      };
-    };
-  };
+  programs.firefox.enable = true;
 
   programs.git.enable = true;
   programs.git.lfs.enable = true;
