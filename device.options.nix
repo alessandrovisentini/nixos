@@ -42,12 +42,6 @@
       description = "Enables gaming software (Steam with Remote Play and dedicated server firewall openings).";
     };
 
-    hasTranscription = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enables the audio transcription stack (transcribe-audio: Vulkan whisper.cpp + sherpa-onnx + ffmpeg). Opt-in per device.";
-    };
-
     hasJellyfin = lib.mkOption {
       type = lib.types.bool;
       default = false;

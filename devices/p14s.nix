@@ -7,7 +7,6 @@
     hasFingerprint = true;
     hasThunderbolt = true;
     hasGaming = true;
-    hasTranscription = true;
     hasJellyfin = true;
   };
 }

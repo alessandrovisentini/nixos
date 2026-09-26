@@ -21,6 +21,7 @@ in {
     traceroute
     ripgrep
     fzf
+    ffmpeg
     unzip
     zip
 
