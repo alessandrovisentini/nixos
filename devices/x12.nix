@@ -4,8 +4,6 @@
     userName = "alessandrovisentini";
     hostName = "x12";
 
-    hasTouchscreen = true;
-    hasAccelerometer = true;
     hasFingerprint = true;
     hasIpu6Camera = true;
     hasThunderbolt = true;

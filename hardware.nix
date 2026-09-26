@@ -30,9 +30,6 @@ in {
   # Thunderbolt
   services.hardware.bolt.enable = lib.mkIf dev.hasThunderbolt true;
 
-  # Accelerometer
-  hardware.sensor.iio.enable = lib.mkIf dev.hasAccelerometer true;
-
   # Fingerprint
   systemd.services.fprintd = lib.mkIf dev.hasFingerprint {
     wantedBy = ["multi-user.target"];

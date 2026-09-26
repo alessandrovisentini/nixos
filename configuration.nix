@@ -13,7 +13,6 @@
       ./display_manager.nix
       ./gnome.nix
       ./sway.nix
-      ./tablet.nix
       ./development.nix
       ./jellyfin.nix
       ./printing.nix

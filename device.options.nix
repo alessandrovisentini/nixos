@@ -1,17 +1,5 @@
 {lib, ...}: {
   options.local.device = {
-    hasTouchscreen = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Built-in touchscreen. Enables lisgd gestures.";
-    };
-
-    hasAccelerometer = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Has an iio accelerometer. Enables iio-sensor-proxy and the sway-rotate service.";
-    };
-
     hasFingerprint = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -46,12 +34,6 @@
       type = lib.types.bool;
       default = false;
       description = "Enables the GNOME desktop as an extra session alongside Sway. Sway stays the default session.";
-    };
-
-    internalOutput = lib.mkOption {
-      type = lib.types.str;
-      default = "eDP-1";
-      description = "Internal panel output name in Sway.";
     };
 
     userName = lib.mkOption {
