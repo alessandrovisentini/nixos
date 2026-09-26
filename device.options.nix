@@ -1,11 +1,5 @@
 {lib, ...}: {
   options.local.device = {
-    hasTabletMode = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Detachable/convertible with a SW_TABLET_MODE switch. Enables the tablet-mode daemon and apply-mode wrapper.";
-    };
-
     hasTouchscreen = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -70,18 +64,6 @@
       type = lib.types.str;
       default = "nixos";
       description = "Networking hostname.";
-    };
-
-    detachableTouchpadSwayId = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "Sway input identifier for the detachable keyboard's touchpad, disabled by apply-mode when the keyboard is removed. Empty disables the toggle.";
-    };
-
-    detachableKeyboardHints = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
-      description = "Substrings matched against /proc/bus/input/devices by mode-daemon to detect whether the detachable keyboard is attached.";
     };
   };
 }
