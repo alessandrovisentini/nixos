@@ -79,10 +79,15 @@ in {
     musescore
     audacity
     transcribe
+    whipper
+    cdrdao
+    cdparanoia
+    flac
     vscodium
     pdfarranger
     unstable.claude-code
     nethack
+    tauon
   ];
 
   # Browsers
