@@ -131,4 +131,17 @@ in {
 
   # Spotify uses 57621 for local-network device discovery.
   networking.firewall.allowedTCPPorts = [57621];
+
+  services.ollama = {
+    enable = true;
+    # AMD GPU acceleration
+    package = pkgs.ollama-rocm;
+    # Coding agents send ~30k-token prompts; the 4k default truncates them.
+    # q8_0 KV cache halves context memory so more of the model stays on the GPU.
+    environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "65536";
+      OLLAMA_FLASH_ATTENTION = "1";
+      OLLAMA_KV_CACHE_TYPE = "q8_0";
+    };
+  };
 }
