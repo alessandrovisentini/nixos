@@ -75,7 +75,7 @@
         "font/collection"         = "org.gnome.font-viewer.desktop";
         "application/x-font-ttf" = "org.gnome.font-viewer.desktop";
 
-        "inode/directory" = "org.gnome.Nautilus.desktop";
+        "inode/directory" = "thunar.desktop";
 
         "application/zip"                    = "org.gnome.Nautilus.desktop";
         "application/x-tar"                  = "org.gnome.Nautilus.desktop";
