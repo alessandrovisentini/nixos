@@ -1,5 +1,5 @@
-{config, ...}: {
-  home-manager.users.${config.local.device.userName} = {
+{...}: {
+  home-manager.users.alessandrovisentini = {
     pkgs,
     config,
     ...

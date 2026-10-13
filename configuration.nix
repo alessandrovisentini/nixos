@@ -1,31 +1,21 @@
 {pkgs, ...}: {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./device.options.nix
-      ./specialisation.nix
-      ./base.nix
-      ./hardware.nix
-      ./power.nix
-      ./main_user.nix
-      ./apps.nix
-      ./gaming.nix
-      ./display_manager.nix
-      ./gnome.nix
-      ./sway.nix
-      ./development.nix
-      ./jellyfin.nix
-      ./printing.nix
-      ./mime_apps.nix
-      ./nix.nix
-    ]
-    # Per-machine device flags. Falls back to safe defaults from
-    # device.options.nix when the file is absent
-    ++ (
-      if builtins.pathExists ./device.nix
-      then [./device.nix]
-      else []
-    );
+  imports = [
+    ./hardware-configuration.nix
+    ./specialisation.nix
+    ./base.nix
+    ./hardware.nix
+    ./power.nix
+    ./main_user.nix
+    ./apps.nix
+    ./gaming.nix
+    ./display_manager.nix
+    ./sway.nix
+    ./development.nix
+    ./jellyfin.nix
+    ./printing.nix
+    ./mime_apps.nix
+    ./nix.nix
+  ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -47,7 +37,7 @@
       "udev.log_priority=3"
     ];
 
-    plymouth.enable = true; # LUKS decrypt UI
+    plymouth.enable = true; # LUKS password screen
   };
 
   system.stateVersion = "25.11";

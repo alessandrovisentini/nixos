@@ -1,23 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  dev = config.local.device;
-
-  # Wi-Fi picker. NetworkManager already ships nmtui, so this is only a
-  # launcher entry that opens it in its own terminal window; the class is what
-  # the Sway floating rule matches.
-  wifiMenu = pkgs.makeDesktopItem {
-    name = "wifi-menu";
-    desktopName = "Wi-Fi";
-    comment = "Connect to a wireless network";
-    exec = "alacritty --class wifi-menu --title Wi-Fi -e nmtui-connect";
-    icon = "network-wireless";
-    categories = ["Settings" "Network"];
-    keywords = ["wifi" "wireless" "network" "wlan"];
-  };
-in {
+{pkgs, ...}: {
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -33,7 +14,7 @@ in {
         # bar
         waybar
 
-        # emoji picker (floating, types into focused window)
+        # emoji picker
         rofimoji
 
         # notifications
@@ -45,7 +26,6 @@ in {
 
         # network
         networkmanagerapplet
-        wifiMenu
 
         # audio
         pwvucontrol
@@ -84,21 +64,13 @@ in {
   # Bluetooth
   services.blueman.enable = true;
 
-  # Bridge Bluetooth AVRCP to MPRIS so playerctl receives headset buttons.
+  # Headset buttons to playerctl. bluez ships the unit, only enable it here.
   systemd.user.services.mpris-proxy = {
-    description = "Bluetooth MPRIS proxy";
-    after = ["bluetooth.target"];
     wantedBy = ["default.target"];
-    serviceConfig = {
-      ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-      Restart = "on-failure";
-    };
+    serviceConfig.Restart = "on-failure";
   };
 
-  # swaylock has no PAM service of its own. Give it the standard generated
-  # stack with fingerprint disabled: fprintd would otherwise block the unlock
-  # waiting on the reader before accepting the typed password, making every
-  # unlock slow. Fingerprint stays available for sudo/polkit.
+  # No fingerprint on the lock screen, it makes typing the password slow.
   security.pam.services.swaylock.fprintAuth = false;
 
   # Screenshare + file pickers
@@ -106,12 +78,8 @@ in {
     enable = true;
     wlr.enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    # Without an explicit routing config, xdg-desktop-portal under
-    # XDG_CURRENT_DESKTOP=sway finds no backend for FileChooser/
-    # AppChooser/OpenURI: the gtk backend ships UseIn=gnome and only a
-    # gnome-portals.conf exists. The result is GTK/GNOME apps (e.g.
-    # deja-dup) failing with "no application to browse the folder".
-    # Pin the default interfaces to gtk and keep screencast on wlr.
+    # Without this GTK apps find no file picker under sway.
+    # Pickers go to gtk, screen capture to wlr.
     config = {
       common = {
         default = ["gtk"];
@@ -125,22 +93,4 @@ in {
       };
     };
   };
-
-  # Detection runs in bash, not Nix eval: sysfs reports a page-size
-  # length and `builtins.readFile` hits unexpected EOF before reading
-  # the actual contents.
-  system.activationScripts.swayDeviceLink = ''
-    set +e
-    ver="$(cat /sys/class/dmi/id/product_version 2>/dev/null)"
-    case "$ver" in
-        "ThinkPad X12 Detachable Gen 1") devid=x12 ;;
-        "ThinkPad P14s Gen 4")           devid=p14s ;;
-        *) exit 0 ;;
-    esac
-    repo="/home/${dev.userName}/Development/repos/dotfiles"
-    [ -d "$repo/config/sway/devices" ] || exit 0
-    [ -e "$repo/config/sway/devices/$devid.conf" ] || exit 0
-    ${pkgs.coreutils}/bin/ln -sfn "devices/$devid.conf" "$repo/config/sway/device.conf"
-    ${pkgs.coreutils}/bin/chown -h ${dev.userName}:${dev.userName} "$repo/config/sway/device.conf" 2>/dev/null || true
-  '';
 }

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# Rips an audio CD to FLAC with MusicBrainz tags, verified against
-# AccurateRip. Only keeps the tracks themselves - whipper also writes a
-# .cue/.log/.m3u/.toc alongside them, which get discarded here.
+# Rip an audio CD to tagged FLAC with whipper, keeping only the tracks.
 
 set -euo pipefail
 
@@ -20,8 +18,7 @@ fi
 
 TMP_DIR=$(mktemp -d)
 
-# Drop the release-type folder (album/ep/single/...) whipper's default
-# template adds - one layer of nesting we don't need.
+# Custom templates skip the album/ep/single folder whipper adds by default.
 if ! whipper cd -d "$DEVICE" rip \
     -O "$TMP_DIR" \
     --track-template "%A - %d/%t. %a - %n" \

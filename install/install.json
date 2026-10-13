@@ -27,7 +27,7 @@
         "enabled": true,
         "source_dir": ".",
         "target_dir": "/etc/nixos",
-        "exclude": ["hardware-configuration.nix", "device.nix"]
+        "exclude": ["hardware-configuration.nix"]
       },
       "post_install": []
     }

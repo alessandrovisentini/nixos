@@ -9,7 +9,6 @@ JSON_FILE="$SCRIPT_DIR/install.json"
 
 source "$SCRIPT_DIR/lib/common.sh"
 
-# Read by the helpers in lib/common.sh (run_jq falls back to nix-shell).
 export DETECTED_OS="nixos"
 
 show_help() {
@@ -42,7 +41,7 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# Clone or update the dotfiles repo that holds the actual config files.
+# Clone or update the dotfiles repo.
 ensure_dotfiles() {
     local url target
     url=$(get_json_value "$JSON_FILE" ".dotfiles.url")
@@ -127,9 +126,7 @@ clear_target_nix_files() {
     done
 }
 
-# Only configuration.nix needs to live in /etc/nixos; every other module
-# is pulled in through relative imports from it, so /etc/nixos stays down
-# to that symlink plus the machine's hardware-configuration.nix.
+# Only configuration.nix goes in /etc/nixos, it imports the rest from the repo.
 link_source_nix_files() {
     local source_dir="$1" target_dir="$2"
     log_info "Creating NixOS symlink (requires sudo)..."
@@ -160,21 +157,9 @@ setup_nixos_system_symlinks() {
     link_source_nix_files        "$source_dir" "$target_dir"
 }
 
-autodetect_device() {
-    local script="$REPO_DIR/setup-device.sh"
-    [[ -x "$script" ]] || return 0
-    log_info "Autodetecting per-device config selectors..."
-    if ! "$script"; then
-        log_warning "Device autodetection failed — link device.nix manually before nixos-rebuild."
-    fi
-}
-
-# Activate the linked configuration. `set -e` aborts the script if the
-# rebuild fails (stop on errors, no manual step when there are none).
 run_nixos_rebuild() {
     log_info "Running nixos-rebuild switch (this can take a while)..."
-    # Refresh the sudo timestamp: the symlink steps are quick, but on a
-    # slow first run the earlier authentication may have expired.
+    # sudo may have timed out by now
     sudo -v
     sudo nixos-rebuild switch
     log_success "nixos-rebuild switch completed"
@@ -185,7 +170,6 @@ ensure_dotfiles
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$DOTFILES_DIR"
 should_run symlinks && create_claude_symlinks "$DOTFILES_DIR"
 should_run nixos    && setup_nixos_system_symlinks
-should_run nixos    && autodetect_device
 should_run rebuild  && run_nixos_rebuild
 should_run post     && run_post_install       "$JSON_FILE" nixos
 

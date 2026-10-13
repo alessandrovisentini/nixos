@@ -10,5 +10,9 @@
     max-free = 21474836480; # 20 GiB
   };
 
-  nix.optimise.automatic = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
 }

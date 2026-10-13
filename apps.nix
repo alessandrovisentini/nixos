@@ -1,12 +1,11 @@
 {
-  config,
+  lib,
   pkgs,
   ...
 }: let
   unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
     config.allowUnfree = true;
   };
-  dev = config.local.device;
 in {
   environment.systemPackages = with pkgs; [
     # CLI utilities
@@ -43,10 +42,10 @@ in {
 
   virtualisation.docker.enable = true;
 
-  programs.nix-ld.enable = true; # runs dynamically-linked binaries
+  programs.nix-ld.enable = true; # run normal linux binaries
   services.fwupd.enable = true;
 
-  users.users.${dev.userName}.packages = with pkgs; [
+  users.users.alessandrovisentini.packages = with pkgs; [
     alacritty
     baobab # disk analyzer
     gnome-calculator
@@ -101,7 +100,7 @@ in {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    # kickstart config uses vim.pack, which needs Neovim 0.12+
+    # my config needs Neovim 0.12+
     package = unstable.neovim-unwrapped;
   };
 
@@ -112,36 +111,20 @@ in {
   programs.gnome-disks.enable = true;
 
   programs.seahorse.enable = true;
-  services.gnome.sushi.enable = true;
 
-  # Nautilus extension discovery
-  environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
-  environment.pathsToLink = ["/share/nautilus-python/extensions"];
-
+  # Installed but not started at boot, start it by hand.
   services.deluge.enable = true;
+  systemd.services.deluged.wantedBy = lib.mkForce [];
 
   programs.localsend = {
     enable = true;
     openFirewall = true;
   };
 
-  # AppImage launcher
+  # AppImages
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
 
-  # Spotify uses 57621 for local-network device discovery.
+  # Spotify local device discovery
   networking.firewall.allowedTCPPorts = [57621];
-
-  services.ollama = {
-    enable = true;
-    # AMD GPU acceleration
-    package = pkgs.ollama-rocm;
-    # Coding agents send ~30k-token prompts; the 4k default truncates them.
-    # q8_0 KV cache halves context memory so more of the model stays on the GPU.
-    environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "65536";
-      OLLAMA_FLASH_ATTENTION = "1";
-      OLLAMA_KV_CACHE_TYPE = "q8_0";
-    };
-  };
 }

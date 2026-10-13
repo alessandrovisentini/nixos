@@ -11,11 +11,9 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
-# Every step this installer understands.
 VALID_STEPS="symlinks nixos rebuild post all"
 
-# Args → INSTALL_STEPS. Unknown steps are fatal: a typo would otherwise
-# skip every step and still print success.
+# Unknown steps are fatal, a typo would otherwise silently skip everything.
 parse_install_steps() {
     INSTALL_STEPS=()
     local rest=()
@@ -45,7 +43,7 @@ expand_vars() { eval echo "$1"; }
 
 ensure_jq() {
     command -v jq &>/dev/null && return 0
-    # On NixOS jq is provided on-demand via nix-shell (see run_jq).
+    # jq comes from nix-shell when missing, nothing to install
     return 0
 }
 
@@ -67,7 +65,7 @@ json_value_exists() {
     [[ -n "$value" ]]
 }
 
-# Idempotent. Backs up an existing non-matching target before replacing.
+# Backs up whatever is already at the target.
 create_symlink() {
     local source_path target_path backup
     source_path=$(expand_vars "$1")
@@ -136,10 +134,7 @@ create_config_symlinks() {
     done
 }
 
-# Claude Code reads ~/.claude regardless of OS, so the same files link in
-# everywhere. The source lives under config/claude in the dotfiles repo, but
-# the target is ~/.claude, not ~/.config. Per-machine state
-# (settings.local.json, .claude.json) stays put and is left untouched.
+# Target is ~/.claude, not ~/.config. Per-machine files in there stay untouched.
 create_claude_symlinks() {
     local repo_dir="$1"
     local claude_dir="$HOME/.claude"

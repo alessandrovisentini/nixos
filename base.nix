@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.bash.interactiveShellInit = ''
     set -o vi
     eval "$(fzf --bash)"
@@ -26,14 +22,14 @@
   };
 
   # Networking
-  networking.hostName = config.local.device.hostName;
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = with pkgs; [
     networkmanager-openvpn
   ];
   networking.firewall.enable = true;
 
-  # Suspend on the physical power button instead of powering off.
+  # Power button
   services.logind.settings.Login.HandlePowerKey = "suspend";
   services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
 }

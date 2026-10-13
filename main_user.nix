@@ -1,14 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}: let
+{pkgs, ...}: let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz";
-  # Parent of this repo, i.e. ~/Development/repos — the dotfiles repo sits beside it.
+  # Parent of this repo, dotfiles live next to it.
   reposHome = builtins.dirOf (toString ./.);
-  dev = config.local.device;
-  outerCfg = config;
 in {
   imports = [
     (import "${home-manager}/nixos")
@@ -16,15 +9,15 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  # User and group (app packages live in apps.nix)
-  users.users.${dev.userName} = {
+  # User and group
+  users.users.alessandrovisentini = {
     isNormalUser = true;
     uid = 1000;
-    group = dev.userName;
-    description = dev.userName;
+    group = "alessandrovisentini";
+    description = "alessandrovisentini";
     extraGroups = ["networkmanager" "wheel" "video" "audio" "disk" "pcap" "input"];
   };
-  users.groups.${dev.userName} = {
+  users.groups.alessandrovisentini = {
     gid = 1000;
   };
 
@@ -35,7 +28,7 @@ in {
   # Polkit
   security.polkit.enable = true;
 
-  # dconf GSettings backend (was implicit via GNOME); home-manager dconf needs it.
+  # dconf
   programs.dconf.enable = true;
 
   # Keyring
@@ -47,8 +40,7 @@ in {
     adwaita-fonts
   ];
 
-  # System-wide Qt platform theme (user-level qt5ct/qt6ct config lives
-  # in the home-manager block below).
+  # Qt theme
   qt = {
     enable = true;
     style = "adwaita-dark";
@@ -83,8 +75,7 @@ in {
     REPOS_HOME = reposHome;
     TTRPG_NOTES_HOME = "${reposHome}/ttrpg-notes";
 
-    # Native Wayland for Electron + Firefox; XWayland is blurry under
-    # fractional scaling.
+    # Native Wayland for Electron and Firefox, XWayland is blurry.
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
   };
@@ -99,17 +90,15 @@ in {
   };
 
   # Home Manager
-  home-manager.users.${dev.userName} = {
+  home-manager.users.alessandrovisentini = {
     lib,
     pkgs,
     config,
     ...
-  }: let
-    dev = outerCfg.local.device;
-  in {
+  }: {
     home.stateVersion = "26.05";
 
-    home.username = dev.userName;
+    home.username = "alessandrovisentini";
 
     dconf = {
       enable = true;

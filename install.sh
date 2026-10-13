@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap entry for NixOS, invoked via `curl … | bash`. Ensures git,
-# clones this repo, then hands off to install/install.sh (which also
-# clones the dotfiles repo for the actual config files).
+# Bootstrap for curl | bash: clones this repo, then runs install/install.sh.
 
 set -e
 
@@ -24,7 +22,7 @@ if [[ ! -f /etc/nixos/configuration.nix ]] && ! command -v nixos-rebuild &>/dev/
     exit 1
 fi
 
-# git is provided on-demand via nix-shell when not already installed.
+# nix-shell fallback for when git is not installed yet
 run_git() {
     if command -v git &>/dev/null; then
         git "$@"
@@ -49,5 +47,5 @@ else
     }
 fi
 
-chmod +x "$TARGET_DIR/install/install.sh" "$TARGET_DIR/setup-device.sh"
+chmod +x "$TARGET_DIR/install/install.sh"
 exec "$TARGET_DIR/install/install.sh" "$@"

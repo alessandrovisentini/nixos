@@ -1,9 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
-  users.users.${config.local.device.userName}.extraGroups = [
+{...}: {
+  users.users.alessandrovisentini.extraGroups = [
     "docker"
   ];
 }
