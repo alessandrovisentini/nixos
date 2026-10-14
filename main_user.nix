@@ -88,6 +88,8 @@ in {
 
     ai = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh";
     h = "$REPOS_HOME/dotfiles/scripts/ai/h.sh";
+
+    rip-cd = "$REPOS_HOME/dotfiles/scripts/rip-cd.sh";
   };
 
   # Home Manager

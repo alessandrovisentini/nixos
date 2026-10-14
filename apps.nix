@@ -88,6 +88,8 @@ in {
     unstable.claude-code
     nethack
     tauon
+    newsflash
+    krita
   ];
 
   # Browsers
