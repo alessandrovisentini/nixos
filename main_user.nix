@@ -74,6 +74,7 @@ in {
 
     REPOS_HOME = reposHome;
     TTRPG_NOTES_HOME = "${reposHome}/ttrpg-notes";
+    NETHACKOPTIONS = "@${reposHome}/dotfiles/config/nethack/nethackrc";
 
     # Native Wayland for Electron and Firefox, XWayland is blurry.
     NIXOS_OZONE_WL = "1";

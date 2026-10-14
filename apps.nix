@@ -36,6 +36,7 @@ in {
     gnumake
     tree-sitter
     markdownlint-cli
+    alejandra
     android-tools
     gh
   ];
