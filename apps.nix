@@ -73,7 +73,6 @@ in {
     obsidian
     ungoogled-chromium
     discord
-    spotify
     easyeffects
     qpwgraph
     musescore
@@ -127,7 +126,4 @@ in {
   # AppImages
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
-
-  # Spotify local device discovery
-  networking.firewall.allowedTCPPorts = [57621];
 }
