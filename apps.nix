@@ -6,6 +6,16 @@
   unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
     config.allowUnfree = true;
   };
+
+  # Qt 6.12 qml validation code clashes with `using namespace` in the unity build.
+  audacity-unstable = unstable.audacity.overrideAttrs (old: {
+    postPatch =
+      (old.postPatch or "")
+      + ''
+        find . -name CMakeLists.txt -exec sed -i \
+          's/qt_add_qml_module(\([A-Za-z0-9_]*\)$/qt_add_qml_module(\1 NO_GENERATE_AOT_VALIDATION/' {} +
+      '';
+  });
 in {
   environment.systemPackages = with pkgs; [
     # CLI utilities
@@ -76,7 +86,7 @@ in {
     easyeffects
     qpwgraph
     musescore
-    audacity
+    audacity-unstable
     transcribe
     whipper
     cdrdao
