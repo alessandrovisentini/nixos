@@ -1,9 +1,4 @@
 {pkgs, ...}: {
-  programs.bash.interactiveShellInit = ''
-    set -o vi
-    eval "$(fzf --bash)"
-  '';
-
   # Timezone
   time.timeZone = "Europe/Rome";
 

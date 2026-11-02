@@ -13,23 +13,32 @@
       "config_symlinks": [
         "alacritty",
         "git",
-        "glow",
+        "gtk-3.0/settings.ini",
+        "gtk-4.0/settings.ini",
         "lazygit",
+        "mimeapps.list",
         "nvim",
         "rofi",
         "sway",
         "swaylock",
         "swaync",
+        "systemd/user/mpris-proxy.service.d",
         "tmux",
-        "waybar"
+        "waybar",
+        "xdg-desktop-portal"
       ],
       "nixos_symlinks": {
         "enabled": true,
         "source_dir": ".",
         "target_dir": "/etc/nixos",
-        "exclude": ["hardware-configuration.nix"]
+        "exclude": [
+          "hardware-configuration.nix"
+        ]
       },
-      "post_install": []
+      "post_install": [
+        "systemctl --user daemon-reload",
+        "systemctl --user enable --now mpris-proxy.service"
+      ]
     }
   }
 }

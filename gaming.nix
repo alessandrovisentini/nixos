@@ -21,12 +21,7 @@ in {
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
-    # gamescopeSession stays off, it breaks plain Steam launches (setuid bwrap).
   };
-
-  # Used per game through Steam launch options ("gamescope ... -- %command%").
-  # capSysNice stays off, its wrapper crashes inside the Steam sandbox.
-  programs.gamescope.enable = true;
 
   # The hooks flip power profile and GPU clocks for the length of the game.
   programs.gamemode = {

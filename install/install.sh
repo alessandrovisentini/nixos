@@ -169,6 +169,7 @@ ensure_dotfiles
 
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$DOTFILES_DIR"
 should_run symlinks && create_claude_symlinks "$DOTFILES_DIR"
+should_run symlinks && source_shell_env       "$DOTFILES_DIR"
 should_run nixos    && setup_nixos_system_symlinks
 should_run rebuild  && run_nixos_rebuild
 should_run post     && run_post_install       "$JSON_FILE" nixos

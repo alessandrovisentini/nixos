@@ -134,6 +134,27 @@ create_config_symlinks() {
     done
 }
 
+add_source_line() {
+    local rc="$1" file="$2"
+    local line="[ -f \"$file\" ] && . \"$file\""
+
+    if [[ -f "$rc" ]] && grep -qF "$line" "$rc"; then
+        log_info "$rc already sources $file"
+        return 0
+    fi
+    echo "$line" >> "$rc"
+    log_success "Added $file to $rc"
+}
+
+# Shell config lives in dotfiles, the rc files only source it.
+# ~/.profile is what ly sources for the graphical session, so the vars reach sway.
+source_shell_env() {
+    local repo_dir="$1"
+    add_source_line "$HOME/.bashrc"  "$repo_dir/config/shell/env.sh"
+    add_source_line "$HOME/.profile" "$repo_dir/config/shell/env.sh"
+    add_source_line "$HOME/.bashrc"  "$repo_dir/config/shell/interactive.sh"
+}
+
 # Target is ~/.claude, not ~/.config. Per-machine files in there stay untouched.
 create_claude_symlinks() {
     local repo_dir="$1"

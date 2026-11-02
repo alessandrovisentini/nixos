@@ -2,7 +2,47 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  # Settings live in dotfiles, next to this repo.
+  dconfDir = ../dotfiles/config/gnome;
+
+  # Local extension, also kept in dotfiles.
+  moveWithoutFollow = pkgs.stdenvNoCC.mkDerivation {
+    pname = "gnome-shell-extension-move-without-follow";
+    version = "0.1.0";
+    src = ../dotfiles/config/gnome-extensions/move-without-follow;
+    dontConfigure = true;
+    dontBuild = true;
+    installPhase = ''
+      runHook preInstall
+      target="$out/share/gnome-shell/extensions/move-without-follow@local"
+      mkdir -p "$target"
+      install -m644 extension.js metadata.json -t "$target/"
+      runHook postInstall
+    '';
+    passthru.extensionUuid = "move-without-follow@local";
+  };
+
+  # Lock every key in the keyfile, lockAll only covers settings written in Nix.
+  dconfLocks = let
+    lines = lib.splitString "\n" (builtins.readFile "${dconfDir}/dconf-settings.ini");
+    step = acc: line: let
+      section = builtins.match "\\[(.*)]" line;
+      key = builtins.match "([A-Za-z0-9-]+)=.*" line;
+    in
+      if section != null
+      then acc // {section = builtins.head section;}
+      else if key != null
+      then acc // {locks = acc.locks ++ ["/${acc.section}/${builtins.head key}"];}
+      else acc;
+  in
+    (builtins.foldl' step {
+        section = "";
+        locks = [];
+      }
+      lines)
+    .locks;
+in {
   services.desktopManager.gnome.enable = true;
 
   services.gnome.games.enable = false;
@@ -16,126 +56,15 @@
     gnomeExtensions.appindicator
     gnomeExtensions.simple-workspaces-bar
     gnomeExtensions.disable-workspace-switcher-overlay
-    (callPackage ./extensions/move-without-follow {})
+    moveWithoutFollow
   ];
 
   services.udev.packages = with pkgs; [gnome-settings-daemon];
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases = [
     {
-      lockAll = true;
-
-      settings = {
-        "org/gnome/shell" = {
-          enabled-extensions = [
-            "appindicatorsupport@rgcjonas.gmail.com"
-            "move-without-follow@local"
-            "simple-workspaces-bar@null-git"
-            "disable-workspace-switcher-overlay@cleardevice"
-          ];
-        };
-
-        "org/gnome/desktop/interface" = {
-          accent-color = "blue";
-          enable-animations = false;
-          enable-hot-corners = false;
-        };
-
-        "org/gnome/desktop/background" = {
-          picture-uri = "";
-          picture-uri-dark = "";
-          picture-options = "none";
-          primary-color = "#000000";
-          color-shading-type = "solid";
-        };
-
-        "org/gnome/desktop/input-sources" = {
-          xkb-options = ["caps:escape_shifted_capslock" "compose:ralt"];
-        };
-
-        "org/gnome/shell/window-switcher" = {
-          current-workspace-only = true;
-        };
-        "org/gnome/shell/app-switcher" = {
-          current-workspace-only = true;
-        };
-
-        "org/gnome/desktop/peripherals/touchpad" = {
-          tap-to-click = false;
-        };
-
-        "org/gnome/mutter" = {
-          dynamic-workspaces = false;
-          overlay-key = "";
-          # Fractional scaling + downsample XWayland to keep it sharp.
-          experimental-features = ["scale-monitor-framebuffer" "xwayland-native-scaling"];
-        };
-        "org/gnome/desktop/wm/preferences" = {
-          num-workspaces = lib.gvariant.mkInt32 9;
-        };
-
-        "org/gnome/shell/keybindings" = {
-          toggle-overview = ["<Super>d"];
-          "switch-to-application-1" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-2" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-3" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-4" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-5" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-6" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-7" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-8" = lib.gvariant.mkEmptyArray "s";
-          "switch-to-application-9" = lib.gvariant.mkEmptyArray "s";
-        };
-
-        "org/gnome/desktop/wm/keybindings" = {
-          "switch-to-workspace-1" = ["<Super>1"];
-          "switch-to-workspace-2" = ["<Super>2"];
-          "switch-to-workspace-3" = ["<Super>3"];
-          "switch-to-workspace-4" = ["<Super>4"];
-          "switch-to-workspace-5" = ["<Super>5"];
-          "switch-to-workspace-6" = ["<Super>6"];
-          "switch-to-workspace-7" = ["<Super>7"];
-          "switch-to-workspace-8" = ["<Super>8"];
-          "switch-to-workspace-9" = ["<Super>9"];
-
-          # Super+Shift+{1..9} handled by move-without-follow extension.
-          "move-to-workspace-1" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-2" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-3" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-4" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-5" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-6" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-7" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-8" = lib.gvariant.mkEmptyArray "s";
-          "move-to-workspace-9" = lib.gvariant.mkEmptyArray "s";
-
-          "close" = ["<Super><Shift>q"];
-          "maximize" = ["<Super>f"];
-          "minimize" = lib.gvariant.mkEmptyArray "s";
-
-          # Cycle windows individually, not grouped by app.
-          "switch-windows" = ["<Super>Tab"];
-          "switch-windows-backward" = ["<Super><Shift>Tab"];
-          "switch-applications" = lib.gvariant.mkEmptyArray "s";
-          "switch-applications-backward" = lib.gvariant.mkEmptyArray "s";
-        };
-
-        "org/gnome/settings-daemon/plugins/media-keys" = {
-          screensaver = ["<Super><Control>q"];
-          custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
-        };
-
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-          binding = "<Super>Return";
-          command = "alacritty --option window.startup_mode='\"Maximized\"'";
-          name = "Launch Alacritty Fullscreen";
-        };
-
-        "org/gnome/settings-daemon/plugins/power" = {
-          sleep-inactive-ac-type = "nothing";
-          sleep-inactive-battery-type = "nothing";
-        };
-      };
+      keyfiles = [dconfDir];
+      locks = dconfLocks;
     }
   ];
 }

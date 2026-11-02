@@ -64,33 +64,13 @@
   # Bluetooth
   services.blueman.enable = true;
 
-  # Headset buttons to playerctl. bluez ships the unit, only enable it here.
-  systemd.user.services.mpris-proxy = {
-    wantedBy = ["default.target"];
-    serviceConfig.Restart = "on-failure";
-  };
-
   # No fingerprint on the lock screen, it makes typing the password slow.
   security.pam.services.swaylock.fprintAuth = false;
 
-  # Screenshare + file pickers
+  # Screenshare + file pickers. Which portal handles what is in dotfiles.
   xdg.portal = {
     enable = true;
     wlr.enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    # Without this GTK apps find no file picker under sway.
-    # Pickers go to gtk, screen capture to wlr.
-    config = {
-      common = {
-        default = ["gtk"];
-        "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
-        "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
-      };
-      sway = {
-        default = ["gtk"];
-        "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
-        "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
-      };
-    };
   };
 }

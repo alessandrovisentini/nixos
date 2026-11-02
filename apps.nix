@@ -41,7 +41,6 @@ in {
     python314
     docker-compose
     delta
-    glow
     jq
     gnumake
     tree-sitter
@@ -99,6 +98,7 @@ in {
     tauon
     newsflash
     krita
+    lutris
   ];
 
   # Browsers

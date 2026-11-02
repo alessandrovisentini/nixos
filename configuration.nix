@@ -13,7 +13,6 @@
     ./development.nix
     ./jellyfin.nix
     ./printing.nix
-    ./mime_apps.nix
     ./nix.nix
   ];
 

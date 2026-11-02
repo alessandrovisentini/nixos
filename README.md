@@ -19,7 +19,8 @@ It clones this repo to `~/Development/repos/nixos`, clones `dotfiles` to
 ## What it does
 
 1. **symlinks** — links `dotfiles/config/*` into `~/.config/*` and the Claude
-   config into `~/.claude`
+   config into `~/.claude`, and makes `~/.bashrc` and `~/.profile` source
+   `dotfiles/config/shell/env.sh` (aliases and env vars, like `REPOS_HOME`)
 2. **nixos** — reverse-links `hardware-configuration.nix` and symlinks
    `configuration.nix` into `/etc/nixos`
 3. **rebuild** — `sudo nixos-rebuild switch`
