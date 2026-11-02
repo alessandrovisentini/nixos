@@ -73,7 +73,4 @@
   programs.dconf.profiles.user.databases = [
     {keyfiles = [../dotfiles/config/desktop];}
   ];
-
-  # Adwaita-dark GTK theme, picked by the dotfiles gtk settings.
-  environment.systemPackages = [pkgs.gnome-themes-extra];
 }
