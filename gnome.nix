@@ -3,25 +3,13 @@
   pkgs,
   ...
 }: let
-  # Settings live in dotfiles, next to this repo.
+  # Settings and extensions live in dotfiles, next to this repo.
   dconfDir = ../dotfiles/config/gnome;
 
-  # Local extension, also kept in dotfiles.
-  moveWithoutFollow = pkgs.stdenvNoCC.mkDerivation {
-    pname = "gnome-shell-extension-move-without-follow";
-    version = "0.1.0";
-    src = ../dotfiles/config/gnome-extensions/move-without-follow;
-    dontConfigure = true;
-    dontBuild = true;
-    installPhase = ''
-      runHook preInstall
-      target="$out/share/gnome-shell/extensions/move-without-follow@local"
-      mkdir -p "$target"
-      install -m644 extension.js metadata.json -t "$target/"
-      runHook postInstall
-    '';
-    passthru.extensionUuid = "move-without-follow@local";
-  };
+  extensions = pkgs.runCommand "gnome-shell-extensions" {} ''
+    mkdir -p $out/share/gnome-shell
+    cp -r ${../dotfiles/config/gnome-extensions} $out/share/gnome-shell/extensions
+  '';
 
   # Lock every key in the keyfile, lockAll only covers settings written in Nix.
   dconfLocks = let
@@ -44,6 +32,8 @@
     .locks;
 in {
   services.desktopManager.gnome.enable = true;
+  # Can't remove this: GNOME only locks the screen when GDM is running.
+  services.displayManager.gdm.enable = true;
 
   services.gnome.games.enable = false;
   services.gnome.core-apps.enable = false;
@@ -52,12 +42,7 @@ in {
   users.users.alessandrovisentini.packages = with pkgs; [gnome-tweaks];
 
   services.gnome.gnome-browser-connector.enable = true;
-  environment.systemPackages = with pkgs; [
-    gnomeExtensions.appindicator
-    gnomeExtensions.simple-workspaces-bar
-    gnomeExtensions.disable-workspace-switcher-overlay
-    moveWithoutFollow
-  ];
+  environment.systemPackages = [extensions];
 
   services.udev.packages = with pkgs; [gnome-settings-daemon];
   programs.dconf.enable = true;

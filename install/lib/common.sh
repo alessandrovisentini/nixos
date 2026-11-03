@@ -147,7 +147,7 @@ add_source_line() {
 }
 
 # Shell config lives in dotfiles, the rc files only source it.
-# ~/.profile is what ly sources for the graphical session, so the vars reach sway.
+# The login manager sources ~/.profile, so the vars reach sway.
 source_shell_env() {
     local repo_dir="$1"
     add_source_line "$HOME/.bashrc"  "$repo_dir/config/shell/env.sh"

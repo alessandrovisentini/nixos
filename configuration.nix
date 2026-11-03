@@ -8,11 +8,12 @@
     ./main_user.nix
     ./apps.nix
     ./gaming.nix
-    ./display_manager.nix
     ./sway.nix
     ./development.nix
     ./jellyfin.nix
     ./printing.nix
+    ./mime_apps.nix
+    ./iphone.nix
     ./nix.nix
   ];
 

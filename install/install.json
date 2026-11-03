@@ -14,15 +14,12 @@
         "alacritty",
         "git",
         "gtk-3.0/settings.ini",
-        "gtk-4.0/settings.ini",
         "lazygit",
-        "mimeapps.list",
         "nvim",
         "rofi",
         "sway",
         "swaylock",
         "swaync",
-        "systemd/user/mpris-proxy.service.d",
         "tmux",
         "waybar",
         "xdg-desktop-portal"
@@ -35,10 +32,7 @@
           "hardware-configuration.nix"
         ]
       },
-      "post_install": [
-        "systemctl --user daemon-reload",
-        "systemctl --user enable --now mpris-proxy.service"
-      ]
+      "post_install": []
     }
   }
 }

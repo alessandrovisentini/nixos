@@ -1,51 +1,77 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  sessions = config.services.displayManager.sessionData.desktops;
+in {
+  # Login screen
+  services.greetd = {
+    enable = true;
+    useTextGreeter = true;
+    settings.default_session.command = lib.concatStringsSep " " [
+      "${pkgs.tuigreet}/bin/tuigreet"
+      "--time"
+      "--remember"
+      "--remember-user-session"
+      "--asterisks"
+      # --cmd skips the session file, so the session type has to be set by hand.
+      "--cmd sway"
+      "--env XDG_SESSION_TYPE=wayland"
+      "--sessions ${sessions}/share/wayland-sessions"
+    ];
+  };
+
+  # Avoid the fingerprint reader for login
+  security.pam.services.greetd.fprintAuth = false;
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    extraPackages = with pkgs;
-      [
-        # lock + idle
-        swaylock
-        swayidle
+    extraPackages = with pkgs; [
+      # lock + idle
+      swaylock
+      swayidle
 
-        # launcher
-        rofi
+      # launcher
+      rofi
 
-        # bar
-        waybar
+      # bar
+      waybar
 
-        # emoji picker
-        rofimoji
+      # emoji picker
+      rofimoji
 
-        # notifications
-        libnotify
-        swaynotificationcenter
+      # notifications
+      libnotify
+      swaynotificationcenter
 
-        # brightness
-        brightnessctl
+      # brightness
+      brightnessctl
 
-        # network
-        networkmanagerapplet
+      # network
+      networkmanagerapplet
 
-        # audio
-        pwvucontrol
-        pulseaudio
+      # audio
+      pwvucontrol
+      pulseaudio
 
-        # media keys
-        playerctl
+      # media keys
+      playerctl
 
-        # screenshot + color picker
-        sway-contrib.grimshot
-        grim
-        slurp
-        imagemagick_light
+      # screenshot + color picker
+      sway-contrib.grimshot
+      grim
+      slurp
+      imagemagick_light
 
-        # mirroring
-        wl-mirror
+      # mirroring
+      wl-mirror
 
-        # icons
-        adwaita-icon-theme
-      ];
+      # icons
+      adwaita-icon-theme
+    ];
   };
 
   # File manager
@@ -63,8 +89,10 @@
 
   # Bluetooth
   services.blueman.enable = true;
+  # Not systemctl enable, on NixOS that links a store path that breaks after a GC.
+  systemd.user.services.mpris-proxy.wantedBy = ["default.target"];
 
-  # No fingerprint on the lock screen, it makes typing the password slow.
+  # No fingerprint on the lock screen, it locks the password unlock until the fingerprint timeouts
   security.pam.services.swaylock.fprintAuth = false;
 
   # Screenshare + file pickers. Which portal handles what is in dotfiles.

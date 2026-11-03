@@ -3,14 +3,14 @@
   pkgs,
   ...
 }: let
-  # iGPU render node
+  # First render node: the iGPU, or the AMD card in the egpu boot.
   renderNode = "/dev/dri/renderD128";
 in {
   services.jellyfin = {
     enable = true;
     openFirewall = true;
 
-    # Runs as my user so it can read media anywhere under my home.
+    # Runs as main user so it can read media anywhere under home.
     user = "alessandrovisentini";
     group = "alessandrovisentini";
 

@@ -1,4 +1,5 @@
 {lib, ...}: {
+  # AMD eGPU
   specialisation = {
     # eGPU only: iGPU off, everything runs on the AMD card.
     egpu.configuration = {
@@ -25,6 +26,32 @@
       services.udev.extraRules = ''
         SUBSYSTEM=="drm", ENV{ID_PATH}=="*simple-framebuffer*", TAG-="master-of-seat", TAG-="seat"
       '';
+
+      # Jellyfin: Intel is off, so qsv fails and nothing transcodes.
+      services.jellyfin = {
+        hardwareAcceleration.type = lib.mkForce "vaapi";
+
+        transcoding = {
+          enableIntelLowPowerEncoding = lib.mkForce false;
+
+          # Needs extra OpenCL or Vulkan bits on AMD, untested.
+          enableToneMapping = lib.mkForce false;
+
+          # Everything the RX 7600 can decode. No VP8, MPEG-2 and VC-1 are left to the CPU.
+          hardwareDecodingCodecs = lib.mkForce {
+            h264 = true;
+            hevc = true;
+            hevc10bit = true;
+            vp9 = true;
+            av1 = true;
+          };
+
+          hardwareEncodingCodecs = lib.mkForce {
+            hevc = true;
+            av1 = true;
+          };
+        };
+      };
     };
   };
 }
