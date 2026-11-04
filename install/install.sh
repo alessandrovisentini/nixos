@@ -18,7 +18,7 @@ Usage: $(basename "$0") [step ...]
 Run the NixOS installer. With no arguments, runs all steps.
 
 Steps:
-  symlinks   Create config symlinks (~/.config/*, ~/.claude/*) from dotfiles
+  symlinks   Create config symlinks (~/.config/*) from dotfiles
   nixos      Setup NixOS system config symlinks (/etc/nixos)
   rebuild    Run \`sudo nixos-rebuild switch\`
   post       Run post-install commands
@@ -168,7 +168,6 @@ run_nixos_rebuild() {
 ensure_dotfiles
 
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$DOTFILES_DIR"
-should_run symlinks && create_claude_symlinks "$DOTFILES_DIR"
 should_run symlinks && source_shell_env       "$DOTFILES_DIR"
 should_run nixos    && setup_nixos_system_symlinks
 should_run rebuild  && run_nixos_rebuild

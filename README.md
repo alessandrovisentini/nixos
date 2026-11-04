@@ -13,13 +13,13 @@ curl -fsSL https://raw.githubusercontent.com/alessandrovisentini/nixos/main/inst
 ```
 
 It clones this repo to `~/Development/repos/nixos`, clones `dotfiles` to
-`~/Development/repos/dotfiles`, links `~/.config/*` and `~/.claude/*`, symlinks
+`~/Development/repos/dotfiles`, links `~/.config/*`, symlinks
 `configuration.nix` into `/etc/nixos`, and runs `nixos-rebuild switch`.
 
 ## What it does
 
-1. **symlinks** — links `dotfiles/config/*` into `~/.config/*` and the Claude
-   config into `~/.claude`, and makes `~/.bashrc` and `~/.profile` source
+1. **symlinks** — links `dotfiles/config/*` into `~/.config/*`, and makes
+   `~/.bashrc` and `~/.profile` source
    `dotfiles/config/shell/env.sh` (aliases and env vars, like `REPOS_HOME`)
 2. **nixos** — reverse-links `hardware-configuration.nix` and symlinks
    `configuration.nix` into `/etc/nixos`

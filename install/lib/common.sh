@@ -154,14 +154,3 @@ source_shell_env() {
     add_source_line "$HOME/.profile" "$repo_dir/config/shell/env.sh"
     add_source_line "$HOME/.bashrc"  "$repo_dir/config/shell/interactive.sh"
 }
-
-# Target is ~/.claude, not ~/.config. Per-machine files in there stay untouched.
-create_claude_symlinks() {
-    local repo_dir="$1"
-    local claude_dir="$HOME/.claude"
-
-    log_info "Creating Claude config symlinks..."
-    for file in settings.json CLAUDE.md; do
-        create_symlink "$repo_dir/config/claude/$file" "$claude_dir/$file"
-    done
-}
