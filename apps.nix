@@ -93,7 +93,6 @@ in {
     flac
     vscodium
     pdfarranger
-    unstable.claude-code
     nethack
     tauon
     newsflash
