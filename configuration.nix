@@ -7,7 +7,6 @@
     ./power.nix
     ./main_user.nix
     ./apps.nix
-    ./gaming.nix
     ./sway.nix
     ./development.nix
     ./jellyfin.nix

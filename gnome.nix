@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: let
-  # Settings and extensions live in dotfiles, next to this repo.
   dconfDir = ../dotfiles/config/gnome;
 
   extensions = pkgs.runCommand "gnome-shell-extensions" {} ''
@@ -11,7 +10,7 @@
     cp -r ${../dotfiles/config/gnome-extensions} $out/share/gnome-shell/extensions
   '';
 
-  # Lock every key in the keyfile, lockAll only covers settings written in Nix.
+  # Lock every key in the keyfile
   dconfLocks = let
     lines = lib.splitString "\n" (builtins.readFile "${dconfDir}/dconf-settings.ini");
     step = acc: line: let

@@ -111,7 +111,7 @@ in {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    # my config needs Neovim 0.12+
+    # nvim config needs Neovim 0.12+
     package = unstable.neovim-unwrapped;
   };
 
